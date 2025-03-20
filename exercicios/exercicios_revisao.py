@@ -242,22 +242,21 @@ def potencia(a,b):
 
 # 15. Faça um Programa que retorne o menor, maior e a soma de um *args de números.
 def estatisticas_numeros(*args):
-    maior = 0
-    soma = 0
-    menor = args[0]
-
-    for i in range(len(args)):
-        soma += args[i]
-
-        if args[i] > maior:
-            maior = args[i]
-
-        elif args[i] < menor:
-            menor = args[i]
-
-    return maior,menor,soma
+    lista = []
+    for i in args:
+        if isinstance(i, list):  # Se for uma lista, adiciona os elementos
+            lista.extend(i)
+        else:  # Se for um número, adiciona normalmente
+            lista.append(i)
+    
+    maior = max(lista)
+    menor = min(lista)
+    soma = sum(lista)
+    
+    return menor, maior, soma
 
 
+estatisticas_numeros(3,7,5)
 # 16. Faça uma função que valide se uma nota está entre 0 e 10.
 # Mostre uma mensagem caso o valor seja inválido e continue pedindo até que o usuário informe um valor válido.
 # Exemplos de saídas para as entradas -1 e 5.5 respectivamente:

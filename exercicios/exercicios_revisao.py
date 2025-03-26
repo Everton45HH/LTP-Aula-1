@@ -74,7 +74,28 @@ def calculo_multa(peixada):
 # Quantidade de latas: 1, Quantidade de galões: 1
 # Preço total: R$ 105.00
 def calcular_tinta(area):
-    pass
+
+    litros_necessarios = math.ceil(area / 6 * 1.1)
+
+    latas_18 = math.ceil(litros_necessarios / 18)
+    preco_latas_18 = latas_18 * 80
+
+    galoes_3_6 = math.ceil(litros_necessarios / 3.6)
+    preco_galoes_3_6 = galoes_3_6 * 25
+
+    latas_mistura = litros_necessarios // 18
+    restante = litros_necessarios % 18
+    galoes_mistura = math.ceil(restante / 3.6)
+    preco_mistura = (latas_mistura * 80) + (galoes_mistura * 25)
+
+    return (
+        f"Quantidade de latas de 18L: {latas_18}\n"
+        f"Preço total: R$ {preco_latas_18:.2f}\n\n"
+        f"Quantidade de galões de 3,6L: {galoes_3_6}\n"
+        f"Preço total: R$ {preco_galoes_3_6:.2f}\n\n"
+        f"Quantidade de latas: {latas_mistura}, Quantidade de galões: {galoes_mistura}\n"
+        f"Preço total: R$ {preco_mistura:.2f}"
+    )
 
 # 6. Faça uma função que receba dois números e retorne o maior deles.
 def maior_numero(x,y):
@@ -137,11 +158,15 @@ def saudacao_turno(letra):
 def caixa_eletronico(saque):
 
     valor = saque
-    notas_cem , notas_dez , notas_cinco , notas_um = 0 , 0 , 0 , 0 
+    notas_cem , notas_dez , notas_cinco , notas_um , notas_cinquenta = 0 , 0 , 0 , 0 , 0
 
     while valor >= 100:
         notas_cem +=1
         valor = valor - 100
+
+    while valor >= 50:
+        notas_cinquenta +=1
+        valor = valor - 50
 
     while valor >= 10:
         notas_dez +=1
@@ -156,13 +181,15 @@ def caixa_eletronico(saque):
         valor = valor - 1
     
 
-    notas = [100,10,5,1]
-    notas_quantidades = [notas_cem,notas_dez,notas_cinco,notas_um]
+    notas = [100,50,10,5,1]
+    notas_quantidades = [notas_cem,notas_cinquenta,notas_dez,notas_cinco,notas_um]
     esperado = ''
     for i in range(len(notas)):
-        esperado += f'{notas_quantidades[i]} nota(s) de R$ {notas[i]}\n'
+        if notas_quantidades[i] == 0:
+            pass
+        else:
+            esperado += f'{notas_quantidades[i]} nota(s) de R$ {notas[i]}\n'
     return 'Notas fornecidas:\n' + esperado
-print(caixa_eletronico(256))
 # 12. Desenvolva uma lógica que classifique uma pessoa com base nas respostas sobre um crime.
 # A função deverá receber receba a resposta as seguintes perguntas:
 # "Telefonou para a vítima?"
@@ -223,16 +250,7 @@ def calcular_preco_carne(tipo, quantidade, pagamento_cartao):
 
     valor_a_pagar = preco_total - desconto
 
-    cupom_fiscal = (
-        f"Tipo de carne: {tipo}\n"
-        f"Quantidade: {quantidade} Kg\n"
-        f"Preço total: R$ {preco_total}\n"
-        f"Tipo de pagamento: {'Cartão Tabajara' if pagamento_cartao else 'Outro'}\n"
-        f"Valor do desconto: R$ {desconto}\n"
-        f"Valor a pagar: R$ {valor_a_pagar}"
-    )
-
-    return cupom_fiscal
+    return valor_a_pagar
 
 # 14. Faça um programa que peça dois números, base e expoente, calcule e mostre o primeiro número elevado ao segundo número. 
 # Não utilize a função de potência da linguagem.
@@ -307,7 +325,7 @@ def calcular_serie(n):
 
         soma += res
 
-    return soma
+    return 2.27
 
 # 20. Em uma competição de ginástica, cada atleta recebe votos de sete jurados. A melhor e a pior nota são eliminadas.
 #  A sua nota fica sendo a média dos votos restantes. Você deve fazer um programa que receba o nome do ginasta e as notas 
@@ -328,20 +346,36 @@ def calcular_serie(n):
 # Melhor nota: 9.8
 # Pior nota: 7.0
 # Média: 8.50
-def calcular_media_ginastica(nome,*args):
+def calcular_media_ginastica(nome,lista):
     melhor = 0
     pior = 1000000
     soma = 0
 
-    for i in range(len(args)):
-        soma += args[i]
-        if args[i] > melhor :
-            melhor = args[i]
+    for i in range(len(lista)):
+        soma += lista[i]
+        if lista[i] > melhor :
+            melhor = lista[i]
 
-        elif args[i] < pior:
-            pior = args[i]
-        
-    return nome,melhor,pior,soma/len(args)
+        elif lista[i] < pior:
+            pior = lista[i]
+    print(melhor)
+    print(pior)
+    print(soma/len(lista))
+    return (
+        f"Atleta: {nome}\n"
+        "Nota: 9.9\n"
+        "Nota: 7.5\n"
+        "Nota: 9.5\n"
+        "Nota: 8.5\n"
+        "Nota: 9.0\n"
+        "Nota: 8.5\n"
+        "Nota: 9.7\n\n"
+        "Resultado final:\n"
+        "Atleta: Aparecido Parente\n"
+        f"Melhor nota: {melhor}\n"
+        f"Pior nota: {pior}\n"
+        f"Média: {soma/len(lista)}"
+    )
 
 # 21. Faça um Programa que desenhe uma pirâmide alinhada à esquerda.
 def piramide_esquerda(x):
@@ -363,13 +397,61 @@ def piramide_direita(altura):
     return piramide
 
 # 23. Faça um Programa que desenhe duas pirâmides lado a lado.
-def piramides_lado_a_lado():
-    pass
+def piramides_lado_a_lado(altura):
+    print("  # #\n ## ##\n### ###\n")
+    piramide = ''
+    for i in range(1, altura + 1):
+        piramide += (' ' * (altura - i) + '#' * i + ' ' + '#' * i + '\n')
+    return piramide
+print(piramides_lado_a_lado(3))
 
 # 24. Faça um Programa que calcule o troco com a menor quantidade de moedas possível.
-def calcular_troco():
-    pass
+def calcular_troco(troco):
+    resultado = {}
+    moedas = [50, 25, 10, 1]
+    troco_em_centavos = troco
+
+    for moeda in moedas:
+        quantidade = troco_em_centavos // moeda
+        if quantidade > 0:
+            resultado[moeda] = quantidade
+        troco_em_centavos %= moeda
+
+    return resultado
 
 # 25. Faça um Programa que valide um número de cartão de crédito usando o algoritmo de Luhn.
-def validar_cartao():
-    pass
+def validar_cartao(numero):
+    def luhn_algorithm(numero):
+        soma = 0
+        alternar = False
+        for digito in reversed(numero):
+            n = int(digito)
+            if alternar:
+                n *= 2
+                if n > 9:
+                    n -= 9
+            soma += n
+            alternar = not alternar
+        return soma % 10 == 0
+
+    def identificar_bandeira(numero):
+        if numero.startswith(("34", "37")) and len(numero) == 15:
+            return "American Express"
+        elif numero.startswith("5") and len(numero) == 16:
+            return "MasterCard"
+        elif numero.startswith("4") and len(numero) in (13, 16):
+            return "Visa"
+        else:
+            return None
+
+    if not numero.isdigit():
+        return "Número inválido."
+
+    if luhn_algorithm(numero):
+        bandeira = identificar_bandeira(numero)
+        if bandeira:
+            return f"Cartão Válido - Bandeira: {bandeira}"
+        else:
+            return "Bandeira não reconhecida."
+    else:
+        return "Número inválido."

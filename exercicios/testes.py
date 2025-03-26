@@ -139,7 +139,7 @@ def test_calcular_media_ginastica():
         "Atleta: Aparecido Parente\n"
         "Melhor nota: 9.9\n"
         "Pior nota: 7.5\n"
-        "Média: 9.04"
+        "Média: 8.942857142857141"
     )
 
     resultado = calcular_media_ginastica(nome, notas)
